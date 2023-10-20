@@ -1,0 +1,91 @@
+---
+title: "Validere Solar Energy"
+output: html_notebook
+---
+
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+
+Canada Solar Power Usage compare with USA Solar Power Usage
+```{r}
+table_1 <- Validere %>% filter(Country %in% c("Canada",'America') & Year == 2022)
+ggplot(table_1, aes(x=Country, y=ISC)) + geom_boxplot()
+ggplot(table_1, aes(x=Country, y=EP)) + geom_boxplot()
+```
+As we can see from the chart, although Canada and the United States are close, Canada's solar energy use rate is much lower than that of the United States. I think this is due to the fact that Canada is further north and the sun shine potential is lower, while the United States, such as California, still has plenty of sunshine. It can also be concluded that due to the imbalance of sunlight, places with less light can not vigorously develop solar energy.
+
+USA Solar Power Usage compare with USA Natural Gas Usage
+```{r}
+table_2 <- Validere %>% filter(Country == "America") %>% select(-(c(ISC)))
+ggplot(table_2, aes(x=Energy, y=EP)) + geom_boxplot()
+ggplot(table_2, aes(x=Energy, y=Manufatoring)) + geom_boxplot()
+ggplot(table_2, aes(x=Energy, y=Storage)) + geom_boxplot()
+ggplot(table_2, aes(x=Energy, y=Delivery)) + geom_boxplot()
+```
+As we can see from Figure 1, even though the United States has plenty of sunlight, it uses more natural gas to generate electricity than solar power.
+
+So I carefully looked at three parts: 1) manufacturing and maintenance costs; 2) Storage cost; 3) Transportation costs; Compare solar and natural gas to study what is holding back the widespread development of solar energy
+
+From Figure2, we can see that solar panels manufacturing and maintenance cost is very high, it also include high labor installation, floor space and telephone costs, and high solar panel repair and refurbishment costs.The failure rate of solar panels is 1-2% per year.
+
+*P.S: I have consulted the reported data released by several major solar panel and natural gas factories. Since the manufacturing and maintenance costs here vary depending on the materials used, the data is too messy and it is difficult to find a control group, so I only chose an average value for the manufacturing and maintenance cost data here as a comparison.*
+
+From Figure3, we can see that solar panels storage cost is high, nowadays we usually solar power batteries to store solar power, and the cost for that is higher than natural gas. Which cost inconvenience on rainy days or winter.
+
+From Figure4, we can see that solar panels delivery cost is much higher then natural gas. Which cause super inconvenience to the place lack of sunshine. And our current, aging electrical grid can't presently distribute renewable energy over long distance makes solar power cannot be widely used.
+
+*P.S: For storage and delivery, different batteries and pipe materials have different storage costs. To facilitate comparative analysis, I choose the most commonly used battery or the average price.*
+
+From all above, we can conclude 4 points which makes solar power cannot be widely use:  
+1) Solar power very depends on location, the distribution of sunlight is not uniform。  
+2）Solar panels manufacturing cost is very high. Solar panels need to be manually. installed, occupy a large area, and need frequent maintenance and renovation to prevent failure.  
+3) Solar panels storage cost is high.  
+4) Solar panels delivery cost is high and very inconvenience.   
+All these prevent solar energy from being more widely adopted.  
+
+*P.S: Because we have one category type data and one quantitative type data, so we should use side-by-side box plots, but as I only found last year Canada and USA Solar capacity data and costing data, so there is only one row of data for comparison which makes the box plot not very rich. If we can get multiple sample data from the United States and Canada in recent years, our histogram data will be better and fuller, and we can also compare multiple comparison bar charts and found the trend.*
+
+
+Compare China Solar Power Usage from 2005 to 2022 before and after government policy support
+```{r}
+table_3 <- Validere %>% filter(Country == "China")
+table_3$ISC <- as.numeric(table_3$ISC)
+typeof(table_3$ISC)
+ggplot(table_3, aes(x = Year, y = ISC)) + geom_point() + geom_smooth()
+```
+As can be seen from the figure, with government policy support, economic support and support for solar energy technology, China's solar power generation has risen exponentially, and China has become the country with the highest solar energy reserve.
+
+China's policy and approach are:    
+1) in June 2006, the founding of the People's Republic of China wind power and solar energy resources evaluation center.  
+2) On March 23, 2009, the Ministry of Finance of the People's Republic of China issued the Interim Measures for the Management of Financial Subsidies for the Application of Solar photovoltaic Buildings to subsidize large-scale solar energy projects such as solar photovoltaic buildings.  
+3) On July 24, 2011, the National Development and Reform Commission of the People's Republic of China issued the Notice of the National Development and Reform Commission on Improving the Policy of Feed-in Tariff for Solar Photovoltaic Power Generation.  
+4) On September 13, 2012, the National Energy Administration of the People's Republic of China issued the "Twelfth Five-Year Plan for the development of Solar power Generation" [69]. The plan proposes that by the end of 2015, the installed solar power capacity of the People's Republic of China will reach more than 21 gigawatts (GW), which means that the installed photovoltaic power capacity of the People's Republic of China is expected to expand more than 6 times in the next 3 years. This plan proposes to accelerate the innovation and development of the solar technology industry.
+
+The government attempts to use subsidies to reduce the operating costs of solar energy enterprises and increase the enthusiasm of enterprises to develop solar energy. At the same time, the tariff subsidy system also increases potential consumers and increases the rate of return of solar companies, which attracts enterprises to invest in new capacity. Subsidies is a "double-edged sword", on the one hand, subsidies indeed motivate the rapid growth of industry; On the other hand, if subsidies fail to adjust with the growth of the industry, it will bring blind expansion of production capacity, slow technological progress, government subsidies are too strong, will lead to the lack of competition for solar companies, if there is no government subsidies, they will lack self-viability, too dependent on subsidies is not desirable. To support the development of photovoltaic industry in our country, the national solar energy enterprise investment shall be 50% of the subsidies, and plan to more than 15 years with a total installed capacity reached 35 gw, pv industry development peak under the subsidy incentives to meet again. In addition, the long-standing electricity price subsidy system has also allowed the industry to maintain profits and continue to attract new capacity investment. Subsidies achievement the photovoltaic industry, but excessive benefits could result in financial burden, price competition is intense. Subsidies have brought about an increase in the burden of financial funds, the gap of renewable energy development funds continues to expand, so we have to repeatedly raise the renewable energy price additional rate, and the subsidy standard of photovoltaic on-grid electricity price has also fallen again and again; On the other hand, the subsidy policy has made the industry focus on scale expansion more than technology improvement, the competitive pattern of volume to win the manufacturer's profit margin has been repeatedly diluted, the export unit price of photovoltaic modules from the beginning of 14 US $0.69/watt fell to June 18 US $0.33/watt. The decline of subsidies is accelerating, and the industry is facing consolidation. The acceleration of the subsidy decline makes the photovoltaic industry face a test, the competition under excess capacity will become more intense, and the industry integration process will speed up.
+
+I think that we can quantify the success of the protocol by hypothesis test. For example, comparing the data of 10 years before and after the issuance of solar energy policy, we can directly use t test (H0: the policy has no impact; H1: Policy has influence) Check p value to determine whether the policy has played a role, or we can also do the regress line to check the p value of multiple policies to see which has the greatest impact and which has the least impact, so as to select the best plan. 
+
+From the above analysis, we have some preferential policies will also have a negative impact, so we might need a long-term data, following solar production charts, the development trend of solar energy company, thus an accurate conclusions.
+
+Reference:  
+1.	https://renewablesassociation.ca/news-release-canada-added-1-8-gw-of-wind-and-solar-in-2022/.  
+2.	https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/provincial-territorial-energy-profiles/provincial-territorial-energy-profiles-canada.html.  
+3.	https://www.reuters.com/business/energy/us-solar-installations-fell-16-2022-market-rebounding-report-2023-03-09/.  
+4.	https://www.reuters.com/business/energy/top-global-solar-power-potential-hotspots-maguire-2023-05-23/.  
+5.	https://www.esmap.org/activities.  
+6.	https://en.wikipedia.org/wiki/Solar_power_in_China#cite_note-iea-44.  
+7.	https://www.forbes.com/home-improvement/solar/cost-of-solar-panels/.  
+8.	https://roofgnome.com/blog/cost/solar-panel-repair-price/.  
+9.	https://www.google.com/search?q=The+NREL+has+determined+that+solar+panel+maintenance+costs+around+%2431+per+kW+per+year.+This+results+in+an+estimated+cost+of+around+%24186+per+year+for+a+6+kW+system+or+%24310+per+year+for+a+10+kW+system.&sca_esv=567469796&sxsrf=AM9HkKkZ8gsZB-j1cdBGeLtDDv2HeSoesg%3A1695355451641&ei=OxINZfnlJrSpptQP-Nql4A4&ved=0ahUKEwi579mbq72BAxW0lIkEHXhtCewQ4dUDCBA&uact=5&oq=The+NREL+has+determined+that+solar+panel+maintenance+costs+around+%2431+per+kW+per+year.+This+results+in+an+estimated+cost+of+around+%24186+per+year+for+a+6+kW+system+or+%24310+per+year+for+a+10+kW+system.&gs_lp=Egxnd3Mtd2l6LXNlcnAixwFUaGUgTlJFTCBoYXMgZGV0ZXJtaW5lZCB0aGF0IHNvbGFyIHBhbmVsIG1haW50ZW5hbmNlIGNvc3RzIGFyb3VuZCAkMzEgcGVyIGtXIHBlciB5ZWFyLiBUaGlzIHJlc3VsdHMgaW4gYW4gZXN0aW1hdGVkIGNvc3Qgb2YgYXJvdW5kICQxODYgcGVyIHllYXIgZm9yIGEgNiBrVyBzeXN0ZW0gb3IgJDMxMCBwZXIgeWVhciBmb3IgYSAxMCBrVyBzeXN0ZW0uMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADMgoQABhHGNYEGLADSJ8IUPoFWPoFcAF4AJABAJgBWaABWaoBATG4AQPIAQD4AQL4AQHiAwQYACBBiAYBkAYK&sclient=gws-wiz-serp   
+10.	https://www.nrel.gov/docs/fy22osti/83586.pdf.  
+11.	https://homeguide.com/costs/solar-battery-storage-system-cost.  
+12.	https://www.elevatenp.org/publications/how-to-read-your-natural-gas-bill/.  
+13.	https://en.wikipedia.org/wiki/Cost_of_electricity_by_source.  
+14.	https://zhuanlan.zhihu.com/p/75427254.  
+
+
+
+
